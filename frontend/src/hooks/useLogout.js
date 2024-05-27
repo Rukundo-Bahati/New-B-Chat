@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
+import axios from 'axios'
 import toast from "react-hot-toast";
 
 const useLogout = () => {
@@ -9,7 +10,7 @@ const useLogout = () => {
 	const logout = async () => {
 		setLoading(true);
 		try {
-			const res = await fetch("/api/auth/logout", {
+			const res = await axios.post( "http://localhost:3030/api/auth/logout", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 			});
