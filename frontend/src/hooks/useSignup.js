@@ -2,6 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useAuthContext } from "../context/AuthContext";
+import Cookies from "js-cookie"; // Import Cookies library
 
 const useSignup = () => {
   const [loading, setLoading] = useState(false);
@@ -25,23 +26,21 @@ const useSignup = () => {
 
     setLoading(true);
     try {
-      const res = await axios("http://localhost:3030/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName,
-          username,
-          password,
-          confirmPassword,
-          gender,
-        }),
+      const res = await axios.post("http://localhost:3030/api/auth/signup", {
+        fullName,
+        username,
+        password,
+        confirmPassword,
+        gender,
       });
 
-      const data = await res.json();
+      const data = res.data;
       if (data.error) {
         throw new Error(data.error);
       }
-      localStorage.setItem("chat-user", JSON.stringify(data));
+      // Store token in cookies
+      Cookies.set("jwt", data.token, { expires: 7 }); // Set expiry date if needed
+      // console.log(data.token)
       setAuthUser(data);
     } catch (error) {
       toast.error(error.message);
@@ -53,6 +52,7 @@ const useSignup = () => {
 
   return { loading, signup };
 };
+
 export default useSignup;
 
 function handleInputErrors({

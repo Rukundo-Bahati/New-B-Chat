@@ -1,3 +1,6 @@
+import EventEmitter from 'events';
+EventEmitter.EventEmitter.defaultMaxListeners = 5;
+
 import path from "path";
 import express from "express";
 import  config  from "config";
@@ -7,7 +10,7 @@ import cookieParser from "cookie-parser";
 import debug from 'debug';
 const log = debug('mychat');
 
-app.use(cors())
+app.use(cors({ origin: 'http://localhost:3000' }));
 const __dirname = path.resolve();
 app.use(express.json()); // to parse the incoming requests with JSON payloads (from req.body)
 app.use(cookieParser());

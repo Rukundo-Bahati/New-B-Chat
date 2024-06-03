@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 import config from 'config'
 import _ from 'lodash'
@@ -30,10 +30,10 @@ export const signup = async (req, res) => {
 
     // Create the new user object
     const newUser = new User(newUserFields);
+    console.log(newUser.password)
 
     // Hash the password
     const salt = await bcrypt.genSalt(10);
-		console.log(salt)
     newUser.password = await bcrypt.hash(password, salt);
 
     // Save the user to the database
@@ -45,7 +45,7 @@ export const signup = async (req, res) => {
     // Send the response with the necessary user details
     res.status(201).json(_.pick(newUser, ['_id', 'fullName', 'username', 'profilePic']));
   } catch (error) {
-    console.error("Error in signup controller", error.message);
+    console.error("Error in signup controller", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -84,3 +84,4 @@ export const logout = (req, res) => {
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
+

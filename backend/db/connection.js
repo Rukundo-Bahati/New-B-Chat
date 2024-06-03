@@ -5,7 +5,7 @@ const log = debug("mychat");
 
 const connection = async () => {
   try {
-    await mongoose.connect(`mongodb://localhost/NewChat`);
+    await mongoose.connect(`mongodb://localhost/Chat`);
     log("Connected to MongoDB NewChat");
   } catch (error) {
     log("Error connecting to MongoDB", error.message);
